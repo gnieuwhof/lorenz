@@ -9,22 +9,25 @@
         private bool previousP5;
         private bool p5TwoBack;
 
-        private PsiWheel1 psiWheel1;
-        private PsiWheel2 psiWheel2;
-        private PsiWheel3 psiWheel3;
-        private PsiWheel4 psiWheel4;
-        private PsiWheel5 psiWheel5;
+        private readonly PsiWheel1 psiWheel1;
+        private readonly PsiWheel2 psiWheel2;
+        private readonly PsiWheel3 psiWheel3;
+        private readonly PsiWheel4 psiWheel4;
+        private readonly PsiWheel5 psiWheel5;
 
-        private MuWheel37 muWheel37;
-        private MuWheel61 muWheel61;
+        private readonly MuWheel37 muWheel37;
+        private readonly MuWheel61 muWheel61;
 
-        private ChiWheel1 chiWheel1;
-        private ChiWheel2 chiWheel2;
-        private ChiWheel3 chiWheel3;
-        private ChiWheel4 chiWheel4;
-        private ChiWheel5 chiWheel5;
+        private readonly ChiWheel1 chiWheel1;
+        private readonly ChiWheel2 chiWheel2;
+        private readonly ChiWheel3 chiWheel3;
+        private readonly ChiWheel4 chiWheel4;
+        private readonly ChiWheel5 chiWheel5;
 
 
+        /// <summary>
+        /// Creates a WheelBay given the twelve wheels.
+        /// </summary>
         public WheelBay(
             PsiWheel1 psiWheel1,
             PsiWheel2 psiWheel2,
@@ -86,6 +89,9 @@
             this.chiWheel5 = chiWheel5;
         }
 
+        /// <summary>
+        /// Sets the positions of the wheels.
+        /// </summary>
         public void SetWheelPositions(
             int psi1Position,
             int psi2Position,
@@ -117,6 +123,15 @@
             this.chiWheel5.Position = chi5Position;
         }
 
+        /// <summary>
+        /// Encipher the given input using the current wheel settings.
+        /// </summary>
+        /// <param name="input">The input to encipher.</param>
+        /// <param name="encipher">
+        /// Whether we are enciphering or deciphering
+        /// (only used for SZ42A/B).
+        /// </param>
+        /// <returns>Returns the converted input.</returns>
         public IEnumerable<VBit> Process(IEnumerable<VBit> input, bool encipher)
         {
             if (input == null)
@@ -178,13 +193,16 @@
             return result;
         }
 
+        /// <summary>
+        /// Creates a byte given max 8 booleans.
+        /// </summary>
         private byte BoolsToByte(params bool[] bools)
         {
             if (bools == null)
                 throw new ArgumentNullException(nameof(bools));
             if (bools.Length > 8)
                 throw new ArgumentException(
-                    "The array connot contain more than 8 elements", nameof(bools));
+                    "The array cannot contain more than 8 elements", nameof(bools));
 
             byte result = 0;
             foreach (bool b in bools)
@@ -206,6 +224,7 @@
             bool previousChi2 = this.chiWheel2.Previous;
             bool previousPsi1 = this.psiWheel1.Previous;
 
+            // These wheels always move.
             this.chiWheel1.Position++;
             this.chiWheel2.Position++;
             this.chiWheel3.Position++;
@@ -237,6 +256,9 @@
             this.muWheel61.Position++;
         }
 
+        /// <summary>
+        /// Gets the motor limitations (used by SZ42A/B only)
+        /// </summary>
         private static bool GetLimitation(bool previousChi2, bool previousPsi1, bool p5TwoBack)
         {
             if (previousChi2)

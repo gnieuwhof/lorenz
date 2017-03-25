@@ -19,7 +19,7 @@
         }
 
 
-        public virtual int Position
+        public int Position
         {
             get
             {
@@ -36,6 +36,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets whether the current pin is active.
+        /// </summary>
         public bool IsActive
         {
             get
@@ -44,11 +47,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets whether the previous position is active
+        /// (used by SZ42A/B only).
+        /// </summary>
         public bool Previous
         {
             get
             {
-                int position = this.Position - 1;
+                int position = (this.Position - 1);
 
                 if (position < 0)
                 {
