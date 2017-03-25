@@ -1,0 +1,266 @@
+﻿namespace nl.gn.LorenzMachine
+{
+    using Baudot;
+    using System;
+    using System.Collections.Generic;
+
+    public class WheelBay
+    {
+        private bool previousP5;
+        private bool p5TwoBack;
+
+        private PsiWheel1 psiWheel1;
+        private PsiWheel2 psiWheel2;
+        private PsiWheel3 psiWheel3;
+        private PsiWheel4 psiWheel4;
+        private PsiWheel5 psiWheel5;
+
+        private MuWheel37 muWheel37;
+        private MuWheel61 muWheel61;
+
+        private ChiWheel1 chiWheel1;
+        private ChiWheel2 chiWheel2;
+        private ChiWheel3 chiWheel3;
+        private ChiWheel4 chiWheel4;
+        private ChiWheel5 chiWheel5;
+
+
+        public WheelBay(
+            PsiWheel1 psiWheel1,
+            PsiWheel2 psiWheel2,
+            PsiWheel3 psiWheel3,
+            PsiWheel4 psiWheel4,
+            PsiWheel5 psiWheel5,
+
+            MuWheel37 muWheel37,
+            MuWheel61 muWheel61,
+
+            ChiWheel1 chiWheel1,
+            ChiWheel2 chiWheel2,
+            ChiWheel3 chiWheel3,
+            ChiWheel4 chiWheel4,
+            ChiWheel5 chiWheel5
+            )
+        {
+            if (psiWheel1 == null)
+                throw new ArgumentNullException(nameof(psiWheel1));
+            if (psiWheel2 == null)
+                throw new ArgumentNullException(nameof(psiWheel2));
+            if (psiWheel3 == null)
+                throw new ArgumentNullException(nameof(psiWheel3));
+            if (psiWheel4 == null)
+                throw new ArgumentNullException(nameof(psiWheel4));
+            if (psiWheel5 == null)
+                throw new ArgumentNullException(nameof(psiWheel5));
+
+            if (muWheel37 == null)
+                throw new ArgumentNullException(nameof(muWheel37));
+            if (muWheel61 == null)
+                throw new ArgumentNullException(nameof(muWheel61));
+
+            if (chiWheel1 == null)
+                throw new ArgumentNullException(nameof(chiWheel1));
+            if (chiWheel2 == null)
+                throw new ArgumentNullException(nameof(chiWheel2));
+            if (chiWheel3 == null)
+                throw new ArgumentNullException(nameof(chiWheel3));
+            if (chiWheel4 == null)
+                throw new ArgumentNullException(nameof(chiWheel4));
+            if (chiWheel5 == null)
+                throw new ArgumentNullException(nameof(chiWheel5));
+
+
+            this.psiWheel1 = psiWheel1;
+            this.psiWheel2 = psiWheel2;
+            this.psiWheel3 = psiWheel3;
+            this.psiWheel4 = psiWheel4;
+            this.psiWheel5 = psiWheel5;
+
+            this.muWheel37 = muWheel37;
+            this.muWheel61 = muWheel61;
+
+            this.chiWheel1 = chiWheel1;
+            this.chiWheel2 = chiWheel2;
+            this.chiWheel3 = chiWheel3;
+            this.chiWheel4 = chiWheel4;
+            this.chiWheel5 = chiWheel5;
+        }
+
+        public void SetWheelPositions(
+            int psi1Position,
+            int psi2Position,
+            int psi3Position,
+            int psi4Position,
+            int psi5Position,
+            int mu37Position,
+            int mu61Position,
+            int chi1Position,
+            int chi2Position,
+            int chi3Position,
+            int chi4Position,
+            int chi5Position
+            )
+        {
+            this.psiWheel1.Position = psi1Position;
+            this.psiWheel2.Position = psi2Position;
+            this.psiWheel3.Position = psi3Position;
+            this.psiWheel4.Position = psi4Position;
+            this.psiWheel5.Position = psi5Position;
+
+            this.muWheel37.Position = mu37Position;
+            this.muWheel61.Position = mu61Position;
+
+            this.chiWheel1.Position = chi1Position;
+            this.chiWheel2.Position = chi2Position;
+            this.chiWheel3.Position = chi3Position;
+            this.chiWheel4.Position = chi4Position;
+            this.chiWheel5.Position = chi5Position;
+        }
+
+        public IEnumerable<VBit> Process(IEnumerable<VBit> input, bool encipher)
+        {
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+
+            this.p5TwoBack = false;
+            this.previousP5 = false;
+
+            foreach (VBit vbit in input)
+            {
+                byte chiKey = this.GetCurrentChiKey();
+                byte psiKey = this.GetCurrentPsiKey();
+
+                byte C = vbit.Value;
+                byte K = (byte)(chiKey ^ psiKey);
+                byte Z = (byte)(K ^ C);
+
+                yield return new VBit(Z);
+
+                this.AdvanceWheelPositions();
+
+                // Keeping track of 5th bit of the input is
+                // only needed for SZ42A/B.
+                this.p5TwoBack = this.previousP5;
+                if (encipher)
+                {
+                    this.previousP5 = ((vbit.Value % 2) == 1);
+                }
+                else
+                {
+                    this.previousP5 = ((Z % 2) == 1);
+                }
+            }
+        }
+
+        private byte GetCurrentChiKey()
+        {
+            byte result = BoolsToByte(
+                this.chiWheel1.IsActive,
+                this.chiWheel2.IsActive,
+                this.chiWheel3.IsActive,
+                this.chiWheel4.IsActive,
+                this.chiWheel5.IsActive
+                );
+
+            return result;
+        }
+
+        private byte GetCurrentPsiKey()
+        {
+            byte result = BoolsToByte(
+                this.psiWheel1.IsActive,
+                this.psiWheel2.IsActive,
+                this.psiWheel3.IsActive,
+                this.psiWheel4.IsActive,
+                this.psiWheel5.IsActive
+                );
+
+            return result;
+        }
+
+        private byte BoolsToByte(params bool[] bools)
+        {
+            if (bools == null)
+                throw new ArgumentNullException(nameof(bools));
+            if (bools.Length > 8)
+                throw new ArgumentException(
+                    "The array connot contain more than 8 elements", nameof(bools));
+
+            byte result = 0;
+            foreach (bool b in bools)
+            {
+                // Move everything in result one position.
+                result <<= 1;
+
+                if (b)
+                {
+                    // Set last.
+                    result |= 1;
+                }
+            }
+            return result;
+        }
+
+        private void AdvanceWheelPositions()
+        {
+            bool previousChi2 = this.chiWheel2.Previous;
+            bool previousPsi1 = this.psiWheel1.Previous;
+
+            this.chiWheel1.Position++;
+            this.chiWheel2.Position++;
+            this.chiWheel3.Position++;
+            this.chiWheel4.Position++;
+            this.chiWheel5.Position++;
+
+            bool limitation = GetLimitation(
+                previousChi2, previousPsi1, this.p5TwoBack);
+
+            // Remove the next line for SZ42A/B motor behaviour.
+            // (but then our cool example text does not
+            // encipher into a readable code)
+            limitation = true;
+
+            if (this.muWheel37.IsActive || !limitation)
+            {
+                this.psiWheel1.Position++;
+                this.psiWheel2.Position++;
+                this.psiWheel3.Position++;
+                this.psiWheel4.Position++;
+                this.psiWheel5.Position++;
+            }
+
+            if (this.muWheel61.IsActive)
+            {
+                this.muWheel37.Position++;
+            }
+
+            this.muWheel61.Position++;
+        }
+
+        private static bool GetLimitation(bool previousChi2, bool previousPsi1, bool p5TwoBack)
+        {
+            if (previousChi2)
+            {
+                // Chi2 lim
+                return true;
+            }
+            if (previousChi2 ^ previousPsi1)
+            {
+                // Psi2 lim
+                return true;
+            }
+            if (p5TwoBack ^ previousChi2)
+            {
+                // P5 lim
+                return true;
+            }
+            if (previousChi2 ^ previousPsi1 ^ p5TwoBack)
+            {
+                // Psi1 P5 lim
+                return true;
+            }
+
+            return false;
+        }
+    }
+}

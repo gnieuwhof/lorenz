@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Baudot</name>
+    </assembly>
+    <members>
+        <member name="M:nl.gn.Baudot.Baudot.TryCharToCode(System.Char,nl.gn.Baudot.VBit@,nl.gn.Baudot.Baudot.Shift@,System.Boolean)">
+            <summary>
+            Try to convert a char to a 5-bit Baudot code.
+            </summary>
+            <param name="ch">Char to convert.</param>
+            <param name="result">Baudot code.</param>
+            <param name="shift">Shift in which the char is found.</param>
+            <param name="lsbFirst">Order of the returned code.</param>
+            <returns>Whether the conversion succeeded.</returns>
+        </member>
+        <member name="M:nl.gn.Baudot.Baudot.ToCode(System.String,System.Boolean)">
+            <summary>
+            Converts a string to Baudot code.
+            </summary>
+            <param name="str">String to convert.
+            Note: lowercase is converted upper,
+            invalid characters are ignored.</param>
+            <param name="lsbFirst">Whether the least significant bit is left.</param>
+            <returns>Enumerable of Baudot codes.</returns>
+        </member>
+        <member name="M:nl.gn.Baudot.Baudot.FromCode(System.Collections.Generic.IEnumerable{nl.gn.Baudot.VBit},System.Boolean)">
+            <summary>
+            Converts Baudot to string.
+            </summary>
+            <param name="baudot">Enumerable of Baudot codes.</param>
+            <param name="lsbFirst">Order of the codes.</param>
+            <returns>String representation of the given code.</returns>
+        </member>
+        <member name="T:nl.gn.Baudot.VBit">
+            <summary>
+            Represents a 5-bit unsinged integer.
+            Note: technically this type is immutable.
+            </summary>
+        </member>
+        <member name="M:nl.gn.Baudot.VBit.#ctor(System.Byte)">
+            <summary>
+            Constructs a VBit given a 0-31 (5-bit) value.
+            </summary>
+            <param name="value">Value of the VBit</param>
+        </member>
+        <member name="M:nl.gn.Baudot.VBit.Equals(nl.gn.Baudot.VBit)">
+            <summary>
+            Returns whether the passed in VBit is equal to this.
+            </summary>
+        </member>
+    </members>
+</doc>
