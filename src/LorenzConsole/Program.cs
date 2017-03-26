@@ -1,6 +1,6 @@
 ﻿namespace LorenzConsole
 {
-    using nl.gn.Baudot;
+    using nl.gn.BaudotPortable;
     using nl.gn.LorenzMachine;
     using System;
     using System.Collections.Generic;

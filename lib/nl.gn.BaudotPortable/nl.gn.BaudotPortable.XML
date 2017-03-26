@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Baudot</name>
+        <name>nl.gn.BaudotPortable</name>
     </assembly>
     <members>
-        <member name="M:nl.gn.Baudot.Baudot.TryCharToCode(System.Char,nl.gn.Baudot.VBit@,nl.gn.Baudot.Baudot.Shift@,System.Boolean)">
+        <member name="M:nl.gn.BaudotPortable.Baudot.TryCharToCode(System.Char,nl.gn.BaudotPortable.VBit@,nl.gn.BaudotPortable.Baudot.Shift@,System.Boolean)">
             <summary>
             Try to convert a char to a 5-bit Baudot code.
             </summary>
@@ -14,7 +14,7 @@
             <param name="lsbFirst">Order of the returned code.</param>
             <returns>Whether the conversion succeeded.</returns>
         </member>
-        <member name="M:nl.gn.Baudot.Baudot.ToCode(System.String,System.Boolean)">
+        <member name="M:nl.gn.BaudotPortable.Baudot.ToCode(System.String,System.Boolean)">
             <summary>
             Converts a string to Baudot code.
             </summary>
@@ -24,7 +24,7 @@
             <param name="lsbFirst">Whether the least significant bit is left.</param>
             <returns>Enumerable of Baudot codes.</returns>
         </member>
-        <member name="M:nl.gn.Baudot.Baudot.FromCode(System.Collections.Generic.IEnumerable{nl.gn.Baudot.VBit},System.Boolean)">
+        <member name="M:nl.gn.BaudotPortable.Baudot.FromCode(System.Collections.Generic.IEnumerable{nl.gn.BaudotPortable.VBit},System.Boolean)">
             <summary>
             Converts Baudot to string.
             </summary>
@@ -32,19 +32,19 @@
             <param name="lsbFirst">Order of the codes.</param>
             <returns>String representation of the given code.</returns>
         </member>
-        <member name="T:nl.gn.Baudot.VBit">
+        <member name="T:nl.gn.BaudotPortable.VBit">
             <summary>
             Represents a 5-bit unsinged integer.
             Note: technically this type is immutable.
             </summary>
         </member>
-        <member name="M:nl.gn.Baudot.VBit.#ctor(System.Byte)">
+        <member name="M:nl.gn.BaudotPortable.VBit.#ctor(System.Byte)">
             <summary>
             Constructs a VBit given a 0-31 (5-bit) value.
             </summary>
             <param name="value">Value of the VBit</param>
         </member>
-        <member name="M:nl.gn.Baudot.VBit.Equals(nl.gn.Baudot.VBit)">
+        <member name="M:nl.gn.BaudotPortable.VBit.Equals(nl.gn.BaudotPortable.VBit)">
             <summary>
             Returns whether the passed in VBit is equal to this.
             </summary>

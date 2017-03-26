@@ -1,6 +1,6 @@
 ﻿namespace nl.gn.LorenzMachine
 {
-    using Baudot;
+    using nl.gn.BaudotPortable;
     using System;
     using System.Collections.Generic;
 
