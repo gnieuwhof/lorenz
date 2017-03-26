@@ -4,6 +4,11 @@
 
     public class ChiWheel3 : WheelBase
     {
+        /// <summary>
+        /// Constructs A Chi 3 wheel.
+        /// Note: this wheel has 29 pins.
+        /// </summary>
+        /// <param name="pinSettings">Pin settings of the wheel.</param>
         public ChiWheel3(bool[] pinSettings)
             : base(pinSettings)
         {

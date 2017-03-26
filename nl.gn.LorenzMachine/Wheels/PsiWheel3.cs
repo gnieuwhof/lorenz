@@ -4,6 +4,11 @@
 
     public class PsiWheel3 : WheelBase
     {
+        /// <summary>
+        /// Constructs A Psi 3 wheel.
+        /// Note: this wheel has 51 pins.
+        /// </summary>
+        /// <param name="pinSettings">Pin settings of the wheel.</param>
         public PsiWheel3(bool[] pinSettings)
             : base(pinSettings)
         {
