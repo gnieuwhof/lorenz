@@ -238,8 +238,8 @@
             // Remove the next line for SZ42A/B motor behaviour.
             // (but then our cool example text does not
             // encipher into a readable code.
-			// @see
-			// https://infogalactic.com/info/Cryptanalysis_of_the_Lorenz_cipher#British_Tunny)
+            // @see
+            // https://infogalactic.com/info/Cryptanalysis_of_the_Lorenz_cipher#British_Tunny)
             limitation = true;
 
             if (this.muWheel37.IsActive || !limitation)
@@ -287,7 +287,7 @@
 
             return false;
         }
-        
+
         [ContractInvariantMethod]
         private void ObjectInvariant()
         {
