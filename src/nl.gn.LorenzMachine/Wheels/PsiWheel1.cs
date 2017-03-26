@@ -1,6 +1,7 @@
 ﻿namespace nl.gn.LorenzMachine
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     public class PsiWheel1 : WheelBase
     {
@@ -12,7 +13,8 @@
         public PsiWheel1(bool[] pinSettings)
             : base(pinSettings)
         {
-            // base does the null check.
+            // Base throws if null.
+            Contract.Requires(pinSettings != null);
 
             if (pinSettings.Length != 43)
                 throw new ArgumentException(

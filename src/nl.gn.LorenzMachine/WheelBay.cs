@@ -3,6 +3,7 @@
     using nl.gn.BaudotPortable;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     public class WheelBay
     {
@@ -285,6 +286,25 @@
             }
 
             return false;
+        }
+        
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+        {
+            Contract.Invariant(this.psiWheel1 != null);
+            Contract.Invariant(this.psiWheel2 != null);
+            Contract.Invariant(this.psiWheel3 != null);
+            Contract.Invariant(this.psiWheel4 != null);
+            Contract.Invariant(this.psiWheel5 != null);
+
+            Contract.Invariant(this.muWheel37 != null);
+            Contract.Invariant(this.muWheel61 != null);
+
+            Contract.Invariant(this.chiWheel1 != null);
+            Contract.Invariant(this.chiWheel2 != null);
+            Contract.Invariant(this.chiWheel3 != null);
+            Contract.Invariant(this.chiWheel4 != null);
+            Contract.Invariant(this.chiWheel5 != null);
         }
     }
 }

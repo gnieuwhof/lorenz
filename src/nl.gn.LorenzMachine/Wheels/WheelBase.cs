@@ -1,10 +1,11 @@
 ﻿namespace nl.gn.LorenzMachine
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     public class WheelBase
     {
-        private bool[] pinSettings;
+        private readonly bool[] pinSettings;
         private int position;
 
         /// <summary>
@@ -39,6 +40,8 @@
                 if (value < 0)
                     new ArgumentException("Value cannot be lower than zero.", nameof(value));
 
+                //Contract.Assume(this.pinSettings.Length > 0);
+
                 int temp = (value % this.pinSettings.Length);
 
                 this.position = temp;
@@ -52,6 +55,10 @@
         {
             get
             {
+                Contract.Requires(this.Position > 0);
+
+                //Contract.Assume(position < this.pinSettings.Length);
+
                 return this.pinSettings[this.Position];
             }
         }
@@ -71,8 +78,17 @@
                     position += this.pinSettings.Length;
                 }
 
+                //Contract.Assume(position >= 0);
+                //Contract.Assume(position < this.pinSettings.Length);
+
                 return this.pinSettings[position];
             }
+        }
+
+        [ContractInvariantMethod]
+        private void ObjectInvariant()
+        {
+            Contract.Invariant(this.pinSettings != null);
         }
     }
 }
