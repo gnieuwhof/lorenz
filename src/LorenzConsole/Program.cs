@@ -15,6 +15,8 @@
             // Lorenz uses LSB first Baudot (hence the 2nd arg).
             var baudot = Baudot.ToCode(plain, true);
 
+            //baudot = BitConverter.FromBase64("QGEzg0oKhIiRmgmpMUJgjkj5IgS4CSyR4DQgzEKxZSDgoj8JhQmDSIU=");
+
             // Scramble the baudot here...
             // (generate Tunny)
 
@@ -61,6 +63,11 @@
 
             Console.WriteLine("Enciphered:");
             Console.Write(Baudot.FromCode(enciphered, true));
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Base64 (first byte = length):");
+            Console.WriteLine(BitConverter.ToBase64(enciphered));
 
             Console.WriteLine();
             Console.WriteLine();
