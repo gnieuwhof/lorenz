@@ -161,10 +161,15 @@
         {
             var bytes = new List<byte>();
 
-            // The first byte is the length...
-            bytes.Add((byte)vBits.Count());
+            // Determine whether the last VBit needs to be dropped.
+            // e.g. 2 bytes can hold 2-3 VBits...
+            int bitCount = vBits.Count() * 5;
+            byte dropByte = (byte)(bitCount % 8 == 0 ? 0 : 1);
 
-            bytes.AddRange( ToBytes(vBits));
+            // The first byte is the drop byte.
+            bytes.Add(dropByte);
+
+            bytes.AddRange(ToBytes(vBits));
 
             string base64 = Convert.ToBase64String(bytes.ToArray());
 
@@ -175,19 +180,24 @@
         {
             byte[] bytes = Convert.FromBase64String(base64);
 
-            byte length = bytes[0];
+            byte dropByte = bytes[0];
 
-            var key = new byte[bytes.Length -1];
+            var key = new byte[bytes.Length - 1];
 
             Array.Copy(bytes, 1, key, 0, key.Length);
 
             VBit[] vBits = FromBytes(key);
 
-            var result = new VBit[length];
+            if (dropByte != 0)
+            {
+                var result = new VBit[vBits.Length - 1];
 
-            Array.Copy(vBits, result, length);
+                Array.Copy(vBits, result, result.Length);
 
-            return result;
+                return result;
+            }
+
+            return vBits;
         }
     }
 }
